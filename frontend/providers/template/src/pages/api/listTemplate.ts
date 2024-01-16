@@ -5,6 +5,8 @@ import { parseGithubUrl } from '@/utils/tools';
 import fs from 'fs';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import path from 'path';
+import { getTemplateStoreById } from '@/services/backend/db/templateStore';
+import { syncStoreFile } from './store/syncStore';
 
 export function replaceRawWithCDN(url: string, cdnUrl: string) {
   let parsedUrl = parseGithubUrl(url);
@@ -16,25 +18,42 @@ export function replaceRawWithCDN(url: string, cdnUrl: string) {
   return url;
 }
 
+const handleTemplateData = (jsonData: string) => {
+  const cdnUrl = process.env.CDN_URL;
+  const _templates: TemplateType[] = JSON.parse(jsonData);
+  const templates = _templates
+    .filter((item) => item?.spec?.draft !== true)
+    .map((item) => {
+      if (!!cdnUrl) {
+        item.spec.readme = replaceRawWithCDN(item.spec.readme, cdnUrl);
+        item.spec.icon = replaceRawWithCDN(item.spec.icon, cdnUrl);
+      }
+      return item;
+    });
+  return templates;
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ApiResp>) {
+  const storeId = req.query['storeId'] as string;
   const originalPath = process.cwd();
   const jsonPath = path.resolve(originalPath, 'templates.json');
-  const cdnUrl = process.env.CDN_URL;
   try {
-    if (fs.existsSync(jsonPath)) {
+    if (storeId) {
+      let templateStore = await getTemplateStoreById(storeId);
+      if (!templateStore) {
+        return jsonRes(res, { code: 400, message: 'storeId is invalid' });
+      }
+      let jsonData = templateStore?.templateJson || '';
+      if (!jsonData) {
+        await syncStoreFile(storeId, templateStore.repositoryUrl, templateStore.branch, res);
+        templateStore = await getTemplateStoreById(storeId);
+        jsonData = templateStore?.templateJson || '';
+      }
+      const templates = handleTemplateData(jsonData);
+      return jsonRes(res, { data: templates, code: 200 });
+    } else if (fs.existsSync(jsonPath)) {
       const jsonData = fs.readFileSync(jsonPath, 'utf8');
-      const _templates: TemplateType[] = JSON.parse(jsonData);
-
-      const templates = _templates
-        .filter((item) => item?.spec?.draft !== true)
-        .map((item) => {
-          if (!!cdnUrl) {
-            item.spec.readme = replaceRawWithCDN(item.spec.readme, cdnUrl);
-            item.spec.icon = replaceRawWithCDN(item.spec.icon, cdnUrl);
-          }
-          return item;
-        });
-
+      const templates = handleTemplateData(jsonData);
       return jsonRes(res, { data: templates, code: 200 });
     } else {
       return jsonRes(res, { data: [], code: 200 });

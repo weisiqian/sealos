@@ -40,6 +40,7 @@
     "js-yaml": "^4.1.0",
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
+    "mongodb": "^5.9.0",
     "nanoid": "^4.0.2",
     "next": "13.1.6",
     "next-i18next": "^13.3.0",
@@ -59,6 +60,7 @@
     "sass": "^1.68.0",
     "sealos-desktop-sdk": "workspace:^",
     "typescript": "5.2.2",
+    "uuid": "^9.0.1",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
@@ -75,6 +77,7 @@
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
     "prettier": "^2.8.8",
+    "@types/uuid": "^9.0.4",
     "svg-inline-loader": "^0.8.2",
     "webpack-bundle-analyzer": "^4.9.1"
   }

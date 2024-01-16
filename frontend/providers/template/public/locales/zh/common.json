@@ -166,7 +166,11 @@
   },
   "SideBar": {
     "Applications": "所有应用",
-    "My App": "我的应用"
+    "My App": "我的应用",
+    "Setting": "全局设置"
+  },
+  "Setting": {
+    "Repository": "仓库设置"
   },
   "Schedule": "执行周期",
   "Last Schedule": "上次执行",

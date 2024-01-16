@@ -7,7 +7,10 @@ import AppMenu from './appmenu';
 const ShowLayoutRoute: Record<string, boolean> = {
   '/': true,
   '/app': true,
-  '/deploy': true
+  '/deploy': true,
+  '/setting': true,
+  '/store/add': true,
+  '/store/edit': true,
 };
 
 export default function Layout({ children }: { children: JSX.Element }) {

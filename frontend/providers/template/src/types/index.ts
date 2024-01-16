@@ -1,3 +1,5 @@
+import { type MongoClient } from 'mongodb';
+
 export type QueryType = {
   name: string;
   templateName: string;
@@ -19,3 +21,7 @@ export type EnvResponse = {
   TEMPLATE_REPO_URL: string;
   SEALOS_NAMESPACE: string;
 };
+
+declare global {
+  var mongodb: MongoClient | null;
+}

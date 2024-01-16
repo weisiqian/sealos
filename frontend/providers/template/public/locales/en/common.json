@@ -160,7 +160,11 @@
   },
   "SideBar": {
     "Applications": "Applications",
-    "My App": "My App"
+    "My App": "My App",
+    "Setting": "Setting"
+  },
+  "Setting": {
+    "Repository": "Repository Setting"
   },
   "Schedule": "Schedule",
   "Last Schedule": "Last Schedule",
