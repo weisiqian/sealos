@@ -19,7 +19,7 @@ import { useToast } from '@/hooks/useToast';
 import { deepSearch } from '@/utils/tools';
 import { addStore } from '@/api/store';
 
-export default function () {
+export default function addTemplateStore () {
   const { t } = useTranslation();
   const router = useRouter();
   const theme = useTheme();

@@ -22,7 +22,7 @@ import { useQuery } from '@tanstack/react-query';
 import { GET } from '@/services/request';
 import { useState } from 'react';
 
-export default function () {
+export default function editTemplateStore() {
   const { t } = useTranslation();
   const router = useRouter();
   const theme = useTheme();
