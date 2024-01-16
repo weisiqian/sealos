@@ -189,6 +189,8 @@ export default function AppList() {
     FastDeployTemplates.splice(0, FastDeployTemplates.length);
   };
 
+  const isEmptyArray = (array: any) => !(Array.isArray(array) && array.length > 0)
+
   return (
     <Flex
       flexDirection={'column'}
@@ -235,7 +237,7 @@ export default function AppList() {
               <MyIcon name={'more'} px={3} />
             </MenuButton>
           }
-          menuList={repositoryList && repositoryList[tabIndex].isDefault ?
+          menuList={isEmptyArray(repositoryList) || (repositoryList && repositoryList[tabIndex].isDefault) ?
             [{
               child: (
                 <Box ml={2}>添加仓库</Box>

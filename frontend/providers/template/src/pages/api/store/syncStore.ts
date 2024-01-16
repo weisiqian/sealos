@@ -70,7 +70,7 @@ export async function GetTemplateStatic() {
 export const syncStoreFile = async (storeId: string, repoHttpUrl: string, branch: string, res: NextApiResponse<ApiResp>) => {
   try {
     const targetFolder = process.env.TEMPLATE_REPO_FOLDER || 'template';
-    const originalPath = path.join(process.cwd(), storeId);
+    const originalPath = path.join(process.cwd(), 'template-data', storeId);
     const targetPath = path.resolve(originalPath, 'templates');
     const jsonPath = path.resolve(originalPath, 'templates.json');
     if (fs.existsSync(originalPath)) {
