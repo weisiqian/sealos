@@ -126,7 +126,7 @@ export const syncStoreFile = async (storeId: string, repoHttpUrl: string, branch
     });
 
     const jsonContent = JSON.stringify(jsonObjArr, null, 2);
-    // fs.writeFileSync(jsonPath, jsonContent, 'utf-8');
+    fs.writeFileSync(jsonPath, jsonContent, 'utf-8');
     await updateTemplateStore(storeId, { templateJson: jsonContent || '' });
 
   } catch (err: any) {

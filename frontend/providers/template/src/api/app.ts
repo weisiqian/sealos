@@ -6,5 +6,5 @@ export const postDeployApp = (
   type: 'create' | 'replace' | 'dryrun' = 'create'
 ) => POST('/api/applyApp', { yamlList, type });
 
-export const getTemplateSource = (templateName: string) =>
-  GET<TemplateSourceType>('/api/getTemplateSource', { templateName });
+export const getTemplateSource = (templateName: string, storeId: string) =>
+  GET<TemplateSourceType>('/api/getTemplateSource', { templateName, storeId });

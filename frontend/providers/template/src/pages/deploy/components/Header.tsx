@@ -26,6 +26,7 @@ import { MouseEvent, useCallback, useMemo } from 'react';
 
 const Header = ({
   appName,
+  storeId,
   title,
   yamlList,
   applyCb,
@@ -34,6 +35,7 @@ const Header = ({
   cloudDomain
 }: {
   appName: string;
+  storeId: string;
   title: string;
   yamlList: YamlItemType[];
   applyCb: () => void;
@@ -51,7 +53,7 @@ const Header = ({
     downLoadBold(
       exportYamlString,
       'application/yaml',
-      appName ? `${appName}.yaml` : `yaml${dayjs().format('YYYYMMDDHHmmss')}.yaml`
+      appName ? `${appName}.yaml` : `yaml${dayjs().format('YYYYMMDDHHmmss')}.yaml`,
     );
   }, [appName, yamlList]);
 
@@ -71,13 +73,13 @@ const Header = ({
   };
 
   const copyTemplateLink = () => {
-    const str = `https://${cloudDomain}/?openapp=system-template%3FtemplateName%3D${appName}`;
+    const str = `https://${cloudDomain}/?openapp=system-template%3FtemplateName%3D${appName}%26storeId%3D${storeId}`;
     copyData(str);
   };
 
-  const MdPart = `[![](https://raw.githubusercontent.com/labring-actions/templates/main/Deploy-on-Sealos.svg)](https://${cloudDomain}/?openapp=system-template%3FtemplateName%3D${appName})`;
+  const MdPart = `[![](https://raw.githubusercontent.com/labring-actions/templates/main/Deploy-on-Sealos.svg)](https://${cloudDomain}/?openapp=system-template%3FtemplateName%3D${appName}%26storeId%3D${storeId})`;
 
-  const HtmlPart = `<a href="https://${cloudDomain}/?openapp=system-template%3FtemplateName%3D${appName}"><img src="https://raw.githubusercontent.com/labring-actions/templates/main/Deploy-on-Sealos.svg" alt="Deploy on Sealos"/></a>`;
+  const HtmlPart = `<a href="https://${cloudDomain}/?openapp=system-template%3FtemplateName%3D${appName}%26storeId%3D${storeId}"><img src="https://raw.githubusercontent.com/labring-actions/templates/main/Deploy-on-Sealos.svg" alt="Deploy on Sealos"/></a>`;
 
   const DeployCountComponent = useMemo(() => {
     return (

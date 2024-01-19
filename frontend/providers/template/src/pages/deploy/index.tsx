@@ -28,7 +28,7 @@ import Yaml from './components/Yaml';
 const ErrorModal = dynamic(() => import('./components/ErrorModal'));
 const Header = dynamic(() => import('./components/Header'), { ssr: false });
 
-export default function EditApp({ appName }: { appName?: string }) {
+export default function EditApp({ appName, storeId }: { appName?: string, storeId?: string }) {
   const { t, i18n } = useTranslation();
   const { toast } = useToast();
   const router = useRouter();
@@ -213,7 +213,7 @@ export default function EditApp({ appName }: { appName?: string }) {
 
   const { data } = useQuery(
     ['getTemplateSource', templateName],
-    () => getTemplateSource(templateName),
+    () => getTemplateSource(templateName, storeId),
     {
       onSuccess(data) {
         handleTemplateSource(data);
@@ -231,7 +231,7 @@ export default function EditApp({ appName }: { appName?: string }) {
   );
 
   const copyTemplateLink = () => {
-    const str = `https://${platformEnvs?.SEALOS_CLOUD_DOMAIN}/?openapp=system-template%3FtemplateName%3D${appName}`;
+    const str = `https://${platformEnvs?.SEALOS_CLOUD_DOMAIN}/?openapp=system-template%3FtemplateName%3D${appName}%26storeId%3D${storeId}`;
     copyData(str);
   };
 
@@ -319,6 +319,7 @@ export default function EditApp({ appName }: { appName?: string }) {
             cloudDomain={platformEnvs?.SEALOS_CLOUD_DOMAIN || ''}
             templateDetail={data?.templateYaml!}
             appName={appName || ''}
+            storeId={storeId || ''}
             title={title}
             yamlList={yamlList}
             applyBtnText={insideCloud ? applyBtnText : 'Deploy on sealos'}
@@ -343,10 +344,12 @@ export default function EditApp({ appName }: { appName?: string }) {
 
 export async function getServerSideProps(content: any) {
   const appName = content?.query?.templateName || '';
+  const storeId = content?.query?.storeId || '';
 
   return {
     props: {
       appName,
+      storeId,
       ...(await serviceSideProps(content))
     }
   };

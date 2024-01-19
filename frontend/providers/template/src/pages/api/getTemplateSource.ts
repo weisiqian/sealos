@@ -12,7 +12,7 @@ import { replaceRawWithCDN } from './listTemplate';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ApiResp>) {
   try {
-    const { templateName } = req.query as { templateName: string };
+    const { templateName, storeId } = req.query as { templateName: string, storeId: string };
 
     let user_namespace = '';
 
@@ -25,10 +25,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       console.log(error, 'Unauthorized allowed');
     }
 
+    
     const { code, message, dataSource, templateYaml, TemplateEnvs, yamlList } =
       await GetTemplateByName({
         namespace: user_namespace,
-        templateName: templateName
+        templateName: templateName,
+        storeId: storeId
       });
 
     if (code !== 20000) {
@@ -57,10 +59,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 export async function GetTemplateByName({
   namespace,
-  templateName
+  templateName,
+  storeId
 }: {
   namespace: string;
   templateName: string;
+  storeId: string;
 }) {
   const cdnUrl = process.env.CDN_URL;
   const targetFolder = process.env.TEMPLATE_REPO_FOLDER || 'template';
@@ -73,10 +77,14 @@ export async function GetTemplateByName({
     SEALOS_NAMESPACE: namespace || ''
   };
 
-  const originalPath = process.cwd();
+  let originalPath = process.cwd();
+  if (storeId) {
+    originalPath = path.join(process.cwd(), 'template-data', storeId);
+  }
   const targetPath = path.resolve(originalPath, 'templates', targetFolder);
   // Query by file name in template details
   const jsonPath = path.resolve(originalPath, 'templates.json');
+  console.log(`jsonPath: `, jsonPath)
   const jsonData: TemplateType[] = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
   const _tempalte = jsonData.find((item) => item.metadata.name === templateName);
   const _tempalteName = _tempalte ? _tempalte.spec.fileName : `${templateName}.yaml`;

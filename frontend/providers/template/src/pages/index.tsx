@@ -118,7 +118,8 @@ export default function AppList() {
     router.push({
       pathname: '/deploy',
       query: {
-        templateName: name
+        templateName: name,
+        storeId: repositoryList[tabIndex].storeId
       }
     });
   };
@@ -135,7 +136,8 @@ export default function AppList() {
       router.push({
         pathname: '/deploy',
         query: {
-          templateName: name
+          templateName: name,
+          storeId: repositoryList[tabIndex].storeId
         }
       });
     }
