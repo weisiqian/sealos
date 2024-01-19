@@ -213,7 +213,7 @@ export default function EditApp({ appName, storeId }: { appName?: string, storeI
 
   const { data } = useQuery(
     ['getTemplateSource', templateName],
-    () => getTemplateSource(templateName, storeId),
+    () => getTemplateSource(templateName, storeId || ''),
     {
       onSuccess(data) {
         handleTemplateSource(data);

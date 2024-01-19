@@ -60,11 +60,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 export async function GetTemplateByName({
   namespace,
   templateName,
-  storeId
+  storeId = ''
 }: {
   namespace: string;
   templateName: string;
-  storeId: string;
+  storeId?: string;
 }) {
   const cdnUrl = process.env.CDN_URL;
   const targetFolder = process.env.TEMPLATE_REPO_FOLDER || 'template';
